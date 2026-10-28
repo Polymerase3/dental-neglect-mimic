@@ -2,8 +2,8 @@
 #
 # Run from anywhere inside the project:  Rscript R/question_1/05_rq1_neglect.R
 #
-# Fits R/question_1/stan/neglect_mimic.stan to the patients of the NB model in
-# R/question_1/02_rq1_burden.R (exactly one of groups 1-4, complete covariates), twice:
+# Fits R/question_1/stan/neglect_mimic.stan to the patients in exactly one of
+# groups 1-4 with complete covariates, twice:
 # with the residual correlation between last dentist visit and X-ray (the
 # reported model, "correlated") and without it ("independent"), for the
 # LOO comparison. The indicators come from R/question_1/04_rq1_efa.R.
@@ -13,8 +13,7 @@
 # year, which drives the missingness, is a covariate for that reason.
 #
 # Outputs go to results/ with the prefix rq1_neglect_; the reported fit is
-# saved as results/question_1/rq1_neglect_fit.rds. reports/question_1/rq1_neglect.qmd documents
-# the model.
+# saved as results/question_1/rq1_neglect_fit.rds.
 
 suppressPackageStartupMessages({
   library(here)

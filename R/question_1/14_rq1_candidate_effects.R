@@ -242,7 +242,7 @@ not_candidates <- tribble(
   "bf_before_prophylactic", "Complement of bf_before_therapeutic within BF before",
   "hn_rth_before_days", "Set after the visit: the dental findings can postpone radiotherapy",
   "hn_site_*", "Finer coding of the head-and-neck region, which is used instead",
-  "comorb_none", "Not consistent with the disease codes (DECISIONS.md); any of the four coded diseases is used instead"
+  "comorb_none", "Not consistent with the disease codes; any of the four coded diseases is used instead"
 )
 screening_table <- bind_rows(
   screening |>
