@@ -1,6 +1,6 @@
 # Codebook — `data/processed/clean_data.csv` / `.rds`
 
-One row per patient. Produced by `R/01_clean_data.R`; the cleaning rules are in [DECISIONS.md](DECISIONS.md).
+One row per patient. Produced by `R/01_clean_data.R`.
 
 **Conventions**
 - **0/1** columns are integers: `1` = yes, `0` = no, empty/`NA` = missing.

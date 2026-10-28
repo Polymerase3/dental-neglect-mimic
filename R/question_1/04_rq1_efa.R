@@ -6,7 +6,7 @@
 # indicators, then on the 4 core indicators used by the latent neglect model
 # (R/question_1/05_rq1_neglect.R). A lavaan CFA of the core indicators checks the fit
 # with and without a residual correlation between last dentist visit and
-# X-ray. reports/question_1/rq1_neglect.qmd documents the results.
+# X-ray.
 #
 # Correlations are polychoric (ordinal pairs), polyserial (ordinal with
 # log counts) and Pearson (log counts), on pairwise-complete data. Every

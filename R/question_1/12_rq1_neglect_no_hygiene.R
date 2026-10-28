@@ -12,7 +12,6 @@
 # the covariate effects, so its posterior is reported next to its prior.
 #
 # Outputs go to results/question_1/ with the prefix rq1_no_hygiene_.
-# reports/question_1/rq1_neglect.qmd documents the comparison.
 
 suppressPackageStartupMessages({
   library(here)

@@ -2,8 +2,7 @@
 #
 # Run from anywhere inside the project:  Rscript R/01_clean_data.R
 #
-# Every rule applied here is explained in DECISIONS.md, and every output
-# variable is described in CODEBOOK.md. Keep the three files in sync.
+# Every output variable is described in CODEBOOK.md. Keep the two files in sync.
 
 suppressPackageStartupMessages({
   library(here)
