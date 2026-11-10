@@ -181,7 +181,7 @@ convergence <- imap(fits, \(f, m) {
     mutate(model = m, .before = 1)
 }) |>
   list_rbind() |>
-  mutate(across(where(is.numeric), \(x) round(x, 3)))
+  mutate(across(where(is.numeric), \(x) round(x, 6)))
 write_csv(convergence, file.path(out_dir, "rq1_neglect_convergence.csv"))
 
 # Sampler: divergences, max-treedepth hits and E-BFMI per chain.
@@ -200,7 +200,7 @@ sampler <- imap(fits, \(f, m) {
     list_rbind()
 }) |>
   list_rbind() |>
-  mutate(across(where(is.double), \(x) round(x, 3)))
+  mutate(across(where(is.double), \(x) round(x, 6)))
 write_csv(sampler, file.path(out_dir, "rq1_neglect_sampler.csv"))
 
 # Trace and rank plots of the reported model; divergences under the traces.
@@ -267,7 +267,7 @@ cor_ppc <- map(names(fits), \(m) {
     list_rbind()
 }) |>
   list_rbind()
-write_csv(mutate(cor_ppc, across(where(is.double), \(x) round(x, 3))), file.path(out_dir, "rq1_neglect_ppc_correlations.csv"))
+write_csv(mutate(cor_ppc, across(where(is.double), \(x) round(x, 6))), file.path(out_dir, "rq1_neglect_ppc_correlations.csv"))
 
 model_names <- c(correlated = "With visit-X-ray residual correlation", independent = "Without")
 cor_plot_data <- cor_ppc |>
@@ -304,7 +304,7 @@ loo_table <- imap(loos, \(l, m) {
   )
 }) |>
   list_rbind() |>
-  mutate(across(where(is.double), \(x) round(x, 3)))
+  mutate(across(where(is.double), \(x) round(x, 6)))
 write_csv(loo_table, file.path(out_dir, "rq1_neglect_loo.csv"))
 writeLines(c(
   "== With visit-X-ray residual correlation", capture.output(print(loos$correlated)), "",
@@ -415,7 +415,7 @@ measurement_of <- function(m) {
 coefficients <- map(names(fits), \(m) bind_rows(coefficients_of(m), measurement_of(m), std_loadings_of(m))) |>
   list_rbind() |>
   relocate(model, section, term, scale) |>
-  mutate(across(where(is.double), \(x) round(x, 3)))
+  mutate(across(where(is.double), \(x) round(x, 6)))
 write_csv(coefficients, file.path(out_dir, "rq1_neglect_coefficients.csv"))
 
 # Coefficient graph of the reported model.

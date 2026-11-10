@@ -397,12 +397,12 @@ saveRDS(map(results, "beta"), file.path(out_dir, "rq1_candidates_draws.rds"))
 
 convergence <- map(results, "convergence") |>
   list_rbind() |>
-  mutate(across(where(is.numeric), \(x) round(x, 3)))
+  mutate(across(where(is.numeric), \(x) round(x, 6)))
 write_csv(convergence, file.path(out_dir, "rq1_candidates_convergence.csv"))
 
 sampler <- map(results, "sampler") |>
   list_rbind() |>
-  mutate(across(where(is.double), \(x) round(x, 3)))
+  mutate(across(where(is.double), \(x) round(x, 6)))
 write_csv(sampler, file.path(out_dir, "rq1_candidates_sampler.csv"))
 
 diagnostics <- map(results, \(r) {
@@ -419,7 +419,7 @@ diagnostics <- map(results, \(r) {
   )
 }) |>
   list_rbind() |>
-  mutate(across(where(is.double), \(x) round(x, 3)))
+  mutate(across(where(is.double), \(x) round(x, 6)))
 write_csv(diagnostics, file.path(out_dir, "rq1_candidates_diagnostics.csv"))
 
 # ---- Effects ---------------------------------------------------------------
@@ -445,7 +445,7 @@ effects <- map(results, \(r) {
   list_rbind() |>
   left_join(select(screening, candidate = id, section, term = label, type, n, n_defined, n_yes, support), by = "candidate") |>
   relocate(candidate, section, term, type, n, n_defined, n_yes, support, scale)
-write_csv(mutate(effects, across(where(is.double), \(x) round(x, 3))), file.path(out_dir, "rq1_candidates_effects.csv"), na = "")
+write_csv(mutate(effects, across(where(is.double), \(x) round(x, 6))), file.path(out_dir, "rq1_candidates_effects.csv"), na = "")
 
 # ---- Forest plot -----------------------------------------------------------
 

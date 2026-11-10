@@ -9,8 +9,8 @@
 # No significance tests (STROBE advises against them in descriptive tables).
 # Imbalance is shown as standardised mean differences (SMD; Yang & Dalton 2012)
 # for the confounders in the model and the comorbidities, with no threshold:
-#   SMD, risk type - the larger of RTH vs BF before and RTH vs BF during/after;
-#   SMD, timing    - the larger of during/after vs before within BF and within RTH.
+#   SMD, risk type - the larger of RTH vs BF before and RTH vs BF during or after;
+#   SMD, timing    - the larger of during or after vs before within BF and within RTH.
 # Cancer type and oncological treatment largely define the groups, and the
 # indicators are the outcome (the MIMIC gives their adjusted effects), so
 # neither gets an SMD.
@@ -30,7 +30,7 @@ in_file <- here("data", "processed", "clean_data.rds")
 out_dir <- here("results", "art1_MIMIC")
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
-group_levels <- c("BF before", "BF during/after", "RTH before", "RTH after")
+group_levels <- c("BF before", "BF during or after", "RTH before", "RTH after")
 
 # ---- Data ------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ d <- readRDS(in_file) |>
   mutate(
     group = factor(case_when(
       group_bf_before == 1 ~ "BF before",
-      group_bf_after == 1 ~ "BF during/after",
+      group_bf_after == 1 ~ "BF during or after",
       group_rth_before == 1 ~ "RTH before",
       group_rth_after == 1 ~ "RTH after"
     ), group_levels),
@@ -138,8 +138,8 @@ smd_vars <- c(
 )
 smds <- tibble(
   row = names(smd_vars),
-  `SMD, risk type` = map_dbl(smd_vars, \(v) max(smd(d[[v]], "BF before", "RTH before"), smd(d[[v]], "BF during/after", "RTH after"))),
-  `SMD, timing` = map_dbl(smd_vars, \(v) max(smd(d[[v]], "BF before", "BF during/after"), smd(d[[v]], "RTH before", "RTH after")))
+  `SMD, risk type` = map_dbl(smd_vars, \(v) max(smd(d[[v]], "BF before", "RTH before"), smd(d[[v]], "BF during or after", "RTH after"))),
+  `SMD, timing` = map_dbl(smd_vars, \(v) max(smd(d[[v]], "BF before", "BF during or after"), smd(d[[v]], "RTH before", "RTH after")))
 ) |>
   mutate(across(-row, \(x) sprintf("%.2f", x)))
 
