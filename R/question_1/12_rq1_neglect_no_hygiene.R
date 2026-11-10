@@ -152,7 +152,7 @@ convergence <- bind_rows(
     rhat = max(latent$rhat), ess_bulk = min(latent$ess_bulk), ess_tail = min(latent$ess_tail)
   )
 ) |>
-  mutate(across(where(is.numeric), \(x) round(x, 3)))
+  mutate(across(where(is.numeric), \(x) round(x, 6)))
 write_csv(convergence, file.path(out_dir, "rq1_no_hygiene_convergence.csv"))
 
 sampler <- imap(get_sampler_params(fit, inc_warmup = FALSE), \(s, chain) {
@@ -167,7 +167,7 @@ sampler <- imap(get_sampler_params(fit, inc_warmup = FALSE), \(s, chain) {
   )
 }) |>
   list_rbind() |>
-  mutate(across(where(is.double), \(x) round(x, 3)))
+  mutate(across(where(is.double), \(x) round(x, 6)))
 write_csv(sampler, file.path(out_dir, "rq1_no_hygiene_sampler.csv"))
 
 trace_plot <- suppressMessages(
@@ -253,7 +253,7 @@ reported <- read_csv(file.path(out_dir, "rq1_neglect_coefficients.csv"), show_co
   mutate(model = "reported")
 comparison <- bind_rows(reported, effects) |>
   relocate(model, section, term, scale) |>
-  mutate(across(where(is.double), \(x) round(x, 3)))
+  mutate(across(where(is.double), \(x) round(x, 6)))
 write_csv(comparison, file.path(out_dir, "rq1_no_hygiene_comparison.csv"))
 
 # ---- Measurement -----------------------------------------------------------
@@ -289,7 +289,7 @@ measurement <- bind_rows(
 ) |>
   select(-p_above_null) |>
   relocate(term, scale) |>
-  mutate(across(where(is.double), \(x) round(x, 3)))
+  mutate(across(where(is.double), \(x) round(x, 6)))
 write_csv(measurement, file.path(out_dir, "rq1_no_hygiene_measurement.csv"))
 
 # ---- Comparison graph ------------------------------------------------------

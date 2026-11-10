@@ -139,7 +139,7 @@ convergence <- imap(fits, \(f, priors) {
     mutate(priors = priors, .before = 1)
 }) |>
   list_rbind() |>
-  mutate(across(where(is.double), \(x) round(x, 3)))
+  mutate(across(where(is.double), \(x) round(x, 6)))
 write_csv(convergence, file.path(out_dir, "rq1_prior_sens_convergence.csv"))
 
 sampler <- imap(fits, \(f, priors) {
@@ -158,7 +158,7 @@ sampler <- imap(fits, \(f, priors) {
     list_rbind()
 }) |>
   list_rbind() |>
-  mutate(across(where(is.double), \(x) round(x, 3)))
+  mutate(across(where(is.double), \(x) round(x, 6)))
 write_csv(sampler, file.path(out_dir, "rq1_prior_sens_sampler.csv"))
 
 # ---- Effects and loadings, compared with the reported model ----------------
@@ -247,7 +247,7 @@ comparison <- bind_rows(reported, refits) |>
   mutate(priors = factor(priors, c("narrower", "reported", "wider"))) |>
   arrange(priors) |>
   relocate(priors, section, term, scale) |>
-  mutate(across(where(is.double), \(x) round(x, 3)))
+  mutate(across(where(is.double), \(x) round(x, 6)))
 write_csv(comparison, file.path(out_dir, "rq1_prior_sens_comparison.csv"))
 
 # ---- Comparison graph ------------------------------------------------------

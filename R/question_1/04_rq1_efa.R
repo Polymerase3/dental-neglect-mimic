@@ -28,7 +28,11 @@ suppressPackageStartupMessages({
 in_file <- here("data", "processed", "clean_data.rds")
 out_dir <- here("results", "question_1")
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
-set.seed(2026) # parallel analysis simulates random data
+# Parallel analysis simulates random data. fa.parallel runs its simulations
+# through mclapply, whose forked workers reseed at random; one core keeps
+# set.seed in effect, so the eigenvalues of random data are reproducible.
+options(mc.cores = 1)
+set.seed(2026)
 
 # Plot colours (dataviz reference palette).
 surface  <- "#fcfcfb"
@@ -94,7 +98,7 @@ mixed_cor <- function(vars) {
 run_efa <- function(vars, set) {
   m <- mixed_cor(vars)
   n_obs <- 1 / mean(1 / m$n[upper.tri(m$n)])
-  pa <- fa.parallel(m$r, n.obs = n_obs, fa = "fa", plot = FALSE)
+  pa <- fa.parallel(m$r, n.obs = n_obs, fa = "fa", n.iter = 1000, plot = FALSE)
   f1 <- fa(m$r, nfactors = 1, n.obs = n_obs, fm = "minres")
   fit <- c(
     "harmonic mean pairwise n" = n_obs,
@@ -167,7 +171,7 @@ cor_long <- function(e) {
     filter(match(var1, e$vars) < match(var2, e$vars)) |>
     mutate(r = e$r[cbind(var1, var2)], n = e$n[cbind(var1, var2)])
 }
-write_csv(mutate(cor_long(efa_all), r = round(r, 3)), file.path(out_dir, "rq1_efa_correlations.csv"))
+write_csv(mutate(cor_long(efa_all), r = round(r, 6)), file.path(out_dir, "rq1_efa_correlations.csv"))
 
 cfa_std <- standardizedSolution(cfa_fits[[2]]) |> filter(op == "=~")
 loadings <- tibble(indicator = names(labels), label = unname(labels)) |>
@@ -179,11 +183,11 @@ loadings <- tibble(indicator = names(labels), label = unname(labels)) |>
     loading_cfa = cfa_std$est.std[match(indicator, cfa_std$rhs)],
     core = indicator %in% core
   ) |>
-  mutate(across(where(is.double), \(x) round(x, 3)))
+  mutate(across(where(is.double), \(x) round(x, 6)))
 write_csv(loadings, file.path(out_dir, "rq1_efa_loadings.csv"))
 
 fit_table <- bind_rows(efa_all$fit, efa_core$fit, reliability, cfa_fit) |>
-  mutate(value = round(value, 3))
+  mutate(value = round(value, 6))
 write_csv(fit_table, file.path(out_dir, "rq1_efa_fit.csv"))
 
 # ---- Plots -----------------------------------------------------------------
@@ -213,7 +217,7 @@ scree <- map(list(efa_all, efa_core), \(e) {
 }) |>
   list_rbind() |>
   mutate(set = factor(set, c(efa_all$set, efa_core$set)))
-write_csv(mutate(scree, eigenvalue = round(eigenvalue, 3)), file.path(out_dir, "rq1_efa_scree.csv"))
+write_csv(mutate(scree, eigenvalue = round(eigenvalue, 6)), file.path(out_dir, "rq1_efa_scree.csv"))
 scree_plot <- ggplot(scree, aes(factor, eigenvalue, colour = series)) +
   geom_hline(yintercept = 0, colour = ink_mute, linewidth = 0.3) +
   geom_line(linewidth = 0.7) +
